@@ -1,0 +1,19 @@
+name: "Issue Auto Assign"
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Auto assign author
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          AUTHOR: ${{ github.actor }}
+        run: |
+          gh issue edit "$ISSUE_URL" --add-assignee "$AUTHOR"
